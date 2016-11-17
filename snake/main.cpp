@@ -1,44 +1,55 @@
 #include <ncurses.h>
 #include <unistd.h>
+#include "player.h"
 
 using namespace std;
 
-int main()
+void initncurses()
 {
 	initscr();
 	cbreak();
 	noecho();
 	keypad(stdscr, TRUE);
+}
+
+int main()
+{
+	initncurses();
+
+	Position winSize;	
+	getmaxyx(stdscr,winSize.y, winSize.x);
+	WINDOW * menu = newwin(winSize.y/2, winSize.x/2, winSize.y/4 , winSize.x/4);
 	
-	int sizeY, sizeX;
-	getmaxyx(stdscr, sizeY, sizeX);
-	WINDOW * menu = newwin(sizeY/2, sizeX/2, sizeY/4 , sizeX/4);
+	getmaxyx(menu, winSize.y, winSize.x);
 	
-	getmaxyx(menu, sizeY, sizeX);
-	int x = 0, y = 0;
-	while(y < sizeY)
+	Position pos;
+	pos.x=0; pos.y=0;
+
+	while(pos.y < winSize.y)
 	{
-		while(x < sizeX)
+		while(pos.x < winSize.x)
 		{
-			wmove(menu, y, x);
+			wmove(menu, pos.y, pos.x);
 			wrefresh(menu);
 			usleep(1000);
-			x++;
+			pos.x++;
 		}
-		x=0;
-		y++;
+		pos.x=0;
+		pos.y++;
 	}
 	delwin(menu);
 	
-	getmaxyx(stdscr, sizeY, sizeX);
-	x = sizeX / 2;
-	y = sizeY / 2;
+	getmaxyx(stdscr, winSize.y, winSize.x);
+	pos.x = winSize.x / 2;
+	pos.y = winSize.y / 2;
 		
-	move(y, x);
+	move(pos.y, pos.x);
 	refresh();
 
 	int key;
 	nodelay(stdscr, TRUE);
+
+	Player p(pos);
 
 	bool playing = true;
 	while(playing)
@@ -54,21 +65,23 @@ int main()
 					playing = false;
 					break;
 				case KEY_UP:
-					y--;
+					p.setDirection(UP);
 					break;
 				case KEY_DOWN:
-					y++;
+					p.setDirection(DOWN);
 					break;
 				case KEY_LEFT:
-					x--;
+					p.setDirection(LEFT);
 					break;
 				case KEY_RIGHT:
-					x++;
+					p.setDirection(RIGHT);
 					break;
 			}
-			move(y,x);
-			refresh();
 		}
+		p.move();
+		move(p.getPosition().y, p.getPosition().x);
+		refresh();
+		usleep(100000);
 	}
 
 	endwin();
