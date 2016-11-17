@@ -3,6 +3,10 @@
 #include "player.h"
 #include "main.h"
 
+#define CURS_INVISIBLE 0
+#define CURS_NORMAL 1
+#define CURS_VISIBLE 2
+
 using namespace std;
 
 void initncurses()
@@ -49,6 +53,7 @@ int main()
 
 	int key;
 	nodelay(stdscr, TRUE);
+	curs_set(CURS_INVISIBLE);		
 
 	Player p(pos);
 
@@ -80,6 +85,7 @@ int main()
 			}
 		}
 		p.move();
+		addch('#');
 		move(p.getPosition().y, p.getPosition().x);
 		refresh();
 		usleep(100000);
