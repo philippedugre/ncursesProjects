@@ -11,6 +11,8 @@ class Player
 	Position m_position;
 	Direction m_dir;
 	int m_length;
+	int m_maxX; int m_maxY;
+	bool m_isAlive = true;
 public:
 	Player(int, int);
 	Player(int,int,int);
@@ -18,6 +20,8 @@ public:
 	Player(Position, int);
 	void move();
 	void setDirection(Direction);
+	void die();
+	bool isAlive(){return m_isAlive;}
 	Direction getDirection(){return m_dir;}
 	Position getPosition(){return m_position;}
 	int getLength(){return m_length;}

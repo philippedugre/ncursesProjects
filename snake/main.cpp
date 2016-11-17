@@ -17,6 +17,23 @@ void initncurses()
 	keypad(stdscr, TRUE);
 }
 
+void clearScreen(Position winSize)
+{
+	Position pos;
+	pos.x=0; pos.y=0;
+	while(pos.y < winSize.y)
+	{
+		while(pos.x < winSize.x)
+		{
+			move(pos.y, pos.x);
+			addch(' ');
+			pos.x++;
+		}
+		pos.x=0;
+		pos.y++;
+	}
+}
+
 int main()
 {
 	initncurses();
@@ -58,7 +75,7 @@ int main()
 	Player p(pos);
 
 	bool playing = true;
-	while(playing)
+	while(playing && p.isAlive())
 	{
 		if((key = getch()) == ERR)
 		{
@@ -71,16 +88,20 @@ int main()
 					playing = false;
 					break;
 				case KEY_UP:
-					p.setDirection(UP);
+					if(p.getDirection() != DOWN)
+						p.setDirection(UP);
 					break;
 				case KEY_DOWN:
-					p.setDirection(DOWN);
+					if(p.getDirection() != UP)
+						p.setDirection(DOWN);
 					break;
 				case KEY_LEFT:
-					p.setDirection(LEFT);
+					if(p.getDirection() != RIGHT)
+						p.setDirection(LEFT);
 					break;
 				case KEY_RIGHT:
-					p.setDirection(RIGHT);
+					if(p.getDirection() != LEFT)
+						p.setDirection(RIGHT);
 					break;
 			}
 		}
@@ -90,7 +111,10 @@ int main()
 		refresh();
 		usleep(100000);
 	}
-
+	
+	clearScreen(winSize);
+	refresh();
+	sleep(5);
 	endwin();
 	return 0;
 }
