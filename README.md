@@ -1,2 +1,2 @@
 # ncursesProjects
-Random little games to lear ncurses and vi
+Random little games to learn ncurses and vi
