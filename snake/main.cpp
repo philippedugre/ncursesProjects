@@ -1,6 +1,7 @@
 #include <ncurses.h>
 #include <unistd.h>
 #include "player.h"
+#include "main.h"
 
 using namespace std;
 
