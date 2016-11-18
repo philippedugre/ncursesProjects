@@ -65,6 +65,12 @@ void Player::move()
 			}
 			break;
 	}
+	for(int i = 0; i < m_tail.getSize();i++)
+		if(m_tail[i].x == m_position.x && m_tail[i].y == m_position.y)
+		{
+			die();
+			break;
+		}
 	m_tail.update(m_position);
 }
 
