@@ -1,5 +1,5 @@
 TARGET = snake
-LIBS = -lncurses
+LIBS = -lncurses -lstdc++
 CC = gcc
 CFLAGS = -g -Wall
 

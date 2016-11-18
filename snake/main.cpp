@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include "player.h"
 #include "main.h"
+#include "partlist.h"
 
 #define CURS_INVISIBLE 0
 #define CURS_NORMAL 1
@@ -15,23 +16,6 @@ void initncurses()
 	cbreak();
 	noecho();
 	keypad(stdscr, TRUE);
-}
-
-void clearScreen(Position winSize)
-{
-	Position pos;
-	pos.x=0; pos.y=0;
-	while(pos.y < winSize.y)
-	{
-		while(pos.x < winSize.x)
-		{
-			move(pos.y, pos.x);
-			addch(' ');
-			pos.x++;
-		}
-		pos.x=0;
-		pos.y++;
-	}
 }
 
 int main()
@@ -106,15 +90,16 @@ int main()
 			}
 		}
 		p.move();
-		addch('#');
-		move(p.getPosition().y, p.getPosition().x);
+		clear();
+		for(int i=0; i < p.getLength(); i++)
+			mvaddch(p[i].y,p[i].x, '#');
+
 		refresh();
 		usleep(100000);
 	}
 	
-	clearScreen(winSize);
+	clear();
 	refresh();
-	sleep(5);
 	endwin();
 	return 0;
 }

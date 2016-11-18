@@ -1,33 +1,29 @@
 #include "player.h"
+#include "partlist.h"
 
-
-Player::Player(int x, int y)
+Player::Player(int x, int y):m_tail(x, y)
 {
 	m_position.x = x;
 	m_position.y = y;
-	m_length = DEFAULT_LENGTH;
 	m_dir = RIGHT;
 	getmaxyx(stdscr, m_maxY, m_maxX);
 }
-Player::Player(int x, int y, int l)
+Player::Player(int x, int y, int l):m_tail(x,y)
 {
 	m_position.x = x;
 	m_position.y = y;
-	m_length = l;
 	m_dir = RIGHT;
 	getmaxyx(stdscr, m_maxY, m_maxX);
 }
-Player::Player(Position pos)
+Player::Player(Position pos):m_tail(pos)
 {
 	m_position = pos;
-	m_length = DEFAULT_LENGTH;
 	m_dir = RIGHT;
 	getmaxyx(stdscr, m_maxY, m_maxX);
 }
-Player::Player(Position pos, int l)
+Player::Player(Position pos, int l):m_tail(pos)
 {
 	m_position = pos;
-	m_length = l;
 	m_dir = RIGHT;
 	getmaxyx(stdscr, m_maxY, m_maxX);
 }
@@ -62,13 +58,14 @@ void Player::move()
 			break;
 		case UP:
 			m_position.y--;
-			if(m_position.y > 0)
+			if(m_position.y < 0)
 			{
 				die();
 				m_position.y++;
 			}
 			break;
 	}
+	m_tail.update(m_position);
 }
 
 void Player::setDirection(Direction dir)
@@ -79,4 +76,9 @@ void Player::setDirection(Direction dir)
 void Player::die()
 {
 	m_isAlive = false;
+}
+
+const Position& Player::operator[](int index) const
+{
+	return m_tail[index];
 }
