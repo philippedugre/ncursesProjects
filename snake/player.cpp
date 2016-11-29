@@ -7,6 +7,7 @@ Player::Player(int x, int y):m_tail(x, y)
 	m_position.y = y;
 	m_dir = RIGHT;
 	getmaxyx(stdscr, m_maxY, m_maxX);
+	m_dot = randomPos(m_maxX, m_maxY);
 }
 Player::Player(int x, int y, int l):m_tail(x,y)
 {
@@ -14,18 +15,21 @@ Player::Player(int x, int y, int l):m_tail(x,y)
 	m_position.y = y;
 	m_dir = RIGHT;
 	getmaxyx(stdscr, m_maxY, m_maxX);
+	m_dot = randomPos(m_maxX, m_maxY);
 }
 Player::Player(Position pos):m_tail(pos)
 {
 	m_position = pos;
 	m_dir = RIGHT;
 	getmaxyx(stdscr, m_maxY, m_maxX);
+	m_dot = randomPos(m_maxX, m_maxY);
 }
 Player::Player(Position pos, int l):m_tail(pos)
 {
 	m_position = pos;
 	m_dir = RIGHT;
 	getmaxyx(stdscr, m_maxY, m_maxX);
+	m_dot = randomPos(m_maxX, m_maxY);
 }
 
 void Player::move()
@@ -71,6 +75,11 @@ void Player::move()
 			die();
 			break;
 		}
+	if(m_position.x == m_dot.x && m_position.y == m_dot.y)
+	{
+		m_tail.upgrade();
+		m_dot = randomPos(m_maxX, m_maxY);
+	}
 	m_tail.update(m_position);
 }
 

@@ -1,14 +1,15 @@
-#include <ncurses.h>
-#include <unistd.h>
-#include "player.h"
 #include "main.h"
-#include "partlist.h"
 
 #define CURS_INVISIBLE 0
 #define CURS_NORMAL 1
 #define CURS_VISIBLE 2
 
 using namespace std;
+
+void printChar(Position p, char c)
+{
+	mvaddch(p.y, p.x, c);
+}
 
 void initncurses()
 {
@@ -21,6 +22,7 @@ void initncurses()
 int main()
 {
 	initncurses();
+	srand(time(NULL));
 
 	Position winSize;	
 	getmaxyx(stdscr,winSize.y, winSize.x);
@@ -92,7 +94,8 @@ int main()
 		p.move();
 		clear();
 		for(int i=0; i < p.getLength(); i++)
-			mvaddch(p[i].y,p[i].x, '#');
+			printChar(p[i], '#');
+		printChar(p.getDot(), '@');
 
 		refresh();
 		usleep(100000);

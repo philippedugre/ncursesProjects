@@ -6,7 +6,7 @@
 class PartList
 {
 	const int DEFAULT_SIZE = 8;
-	const int DEFAULT_LENGTH = 10;
+	const int DEFAULT_LENGTH = 2;
 	Position* m_parts;
 	int m_size;
 	int m_nElements;
